@@ -1,5 +1,5 @@
 # DBFair
-Progetto di Basi di Dati- Anno Scolastico  2021/2022
+Progetto di Basi di Dati - Anno Scolastico  2021/2022
 
 IMPORT:
 server>data import>import from self-contained file>start import

@@ -41,7 +41,7 @@ CREATE TABLE `visitatori` (
 
 LOCK TABLES `visitatori` WRITE;
 /*!40000 ALTER TABLE `visitatori` DISABLE KEYS */;
-INSERT INTO `visitatori` VALUES ('sd','sd','sd','2001-01-01','sd');
+INSERT INTO `visitatori` VALUES ('sd','sd','sd','2001-01-01','sd'),('syso','gay','trallalla','2002-02-02','gay');
 /*!40000 ALTER TABLE `visitatori` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-24 12:10:58
+-- Dump completed on 2022-05-24 12:31:24
