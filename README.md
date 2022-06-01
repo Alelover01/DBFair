@@ -11,5 +11,5 @@ C:\xampp\mysql\bin\mysqldump --host=localhost --port=3306 --default-character-se
 
 Controllare che nel file siano presenti all'inizio:
 
-CREATE DATABASE nomedb;
-USE nomedb;
+CREATE DATABASE fairdb;
+USE fairdb;
