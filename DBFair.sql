@@ -15,12 +15,12 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
-CREATE DATABASE fairdb;
-USE fairdb;
 --
 -- Table structure for table `appartenenza`
 --
+
+CREATE DATABASE fairdb;
+USE fairdb;
 
 DROP TABLE IF EXISTS `appartenenza`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -78,7 +78,7 @@ DROP TABLE IF EXISTS `biglietti`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `biglietti` (
-  `idBiglietto` int(11) NOT NULL,
+  `idBiglietto` varchar(20) NOT NULL,
   `prezzo` decimal(3,2) NOT NULL,
   `descrizione` varchar(45) NOT NULL,
   PRIMARY KEY (`idBiglietto`)
@@ -91,6 +91,7 @@ CREATE TABLE `biglietti` (
 
 LOCK TABLES `biglietti` WRITE;
 /*!40000 ALTER TABLE `biglietti` DISABLE KEYS */;
+INSERT INTO `biglietti` VALUES ('bambini',0.00,'Entrata gratuita per bambini fino ai 5 anni'),('online ridotto',7.20,'Biglietto ridotto online'),('online singolo',9.99,'Biglietto singolo online'),('pass azienda',0.00,'Entrata per i dipendenti delle aziende'),('ridotto',8.00,'Entrata per singolo padiglione con prezzo rid'),('singolo',9.99,'Entrata base per singolo padiglione'),('tutti padiglioni',9.99,'Entrata che consente l’accesso a tutti i padi'),('tutti padiglioni rid',9.99,'Entrata ridotta per l’accesso a tutti i padig');
 /*!40000 ALTER TABLE `biglietti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,7 +115,34 @@ CREATE TABLE `giorni` (
 
 LOCK TABLES `giorni` WRITE;
 /*!40000 ALTER TABLE `giorni` DISABLE KEYS */;
+INSERT INTO `giorni` VALUES ('2022-05-06','Primo giorno'),('2022-05-07',NULL),('2022-05-08',NULL),('2022-05-09',NULL),('2022-05-10','Ultimo giorno');
 /*!40000 ALTER TABLE `giorni` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `giorni-biglietti`
+--
+
+DROP TABLE IF EXISTS `giorni-biglietti`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `giorni-biglietti` (
+  `biglietto` varchar(45) NOT NULL,
+  `girono` date NOT NULL,
+  PRIMARY KEY (`girono`,`biglietto`),
+  KEY `Biglietto` (`biglietto`),
+  CONSTRAINT `Biglietto` FOREIGN KEY (`biglietto`) REFERENCES `biglietti` (`idBiglietto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `Giorno` FOREIGN KEY (`girono`) REFERENCES `giorni` (`data`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `giorni-biglietti`
+--
+
+LOCK TABLES `giorni-biglietti` WRITE;
+/*!40000 ALTER TABLE `giorni-biglietti` DISABLE KEYS */;
+/*!40000 ALTER TABLE `giorni-biglietti` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -127,9 +155,11 @@ DROP TABLE IF EXISTS `ordini`;
 CREATE TABLE `ordini` (
   `idOrdine` int(11) NOT NULL,
   `giorno` varchar(45) NOT NULL,
-  `codVisitatore` varchar(45) NOT NULL,
+  `saldoTotale` decimal(3,2) NOT NULL,
   `codPromozione` varchar(45) NOT NULL,
-  PRIMARY KEY (`idOrdine`)
+  PRIMARY KEY (`idOrdine`),
+  KEY `codPromozione` (`codPromozione`),
+  CONSTRAINT `codPromozione` FOREIGN KEY (`codPromozione`) REFERENCES `promozioni` (`idPromozione`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -246,6 +276,7 @@ CREATE TABLE `promozioni` (
 
 LOCK TABLES `promozioni` WRITE;
 /*!40000 ALTER TABLE `promozioni` DISABLE KEYS */;
+INSERT INTO `promozioni` VALUES ('famiglia',5,'2 adulti + 2 bambini paganti'),('gruppo 11-30',25,'Promozione per gruppi fino a 30 persone'),('gruppo 5-10',10,'Promozione per gruppi da 5 a 10 persone'),('gruppo più 30',40,'Promozione per gruppi con più di 30 persone');
 /*!40000 ALTER TABLE `promozioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -319,8 +350,40 @@ CREATE TABLE `visitatori` (
 
 LOCK TABLES `visitatori` WRITE;
 /*!40000 ALTER TABLE `visitatori` DISABLE KEYS */;
-INSERT INTO `visitatori` VALUES ('sd','sd','sd','2001-01-01','sd'),('syso','gay','trallalla','2002-02-02','gay');
+INSERT INTO `visitatori` VALUES ('gitfhsdoe4558439asd','gioia','folly','2022-06-02','M'),('syso','gay','trallalla','2002-02-02','gay'),('tre','tre','ert','2022-06-02','F');
 /*!40000 ALTER TABLE `visitatori` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `visitatori-ordini-biglietti`
+--
+
+DROP TABLE IF EXISTS `visitatori-ordini-biglietti`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `visitatori-ordini-biglietti` (
+  `codVisitatore` varchar(45) NOT NULL,
+  `codOrdine` int(11) NOT NULL,
+  `codBiglietto` varchar(45) NOT NULL,
+  `Data` date NOT NULL,
+  PRIMARY KEY (`codVisitatore`,`codOrdine`,`codBiglietto`,`Data`),
+  KEY `codOrdine` (`codOrdine`),
+  KEY `codBiglietto` (`codBiglietto`),
+  KEY `Data` (`Data`),
+  CONSTRAINT `Data` FOREIGN KEY (`Data`) REFERENCES `giorni-biglietti` (`girono`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `codBiglietto` FOREIGN KEY (`codBiglietto`) REFERENCES `biglietti` (`idBiglietto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `codOrdine` FOREIGN KEY (`codOrdine`) REFERENCES `ordini` (`idOrdine`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `codVisitatore` FOREIGN KEY (`codVisitatore`) REFERENCES `visitatori` (`codice fiscale`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `visitatori-ordini-biglietti`
+--
+
+LOCK TABLES `visitatori-ordini-biglietti` WRITE;
+/*!40000 ALTER TABLE `visitatori-ordini-biglietti` DISABLE KEYS */;
+/*!40000 ALTER TABLE `visitatori-ordini-biglietti` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -332,4 +395,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-01 15:41:43
+-- Dump completed on 2022-06-14 15:38:36

@@ -7,7 +7,7 @@ refresha
 TADAA!!
 
 EXPORT:
-C:\xampp\mysql\bin\mysqldump --host=localhost --port=3306 --default-character-set=utf8 --user=root --protocol=tcp --skip-triggers "nomedb" > nomefile.sql
+C:\xampp\mysql\bin\mysqldump --host=localhost --port=3306 --default-character-set=utf8 --user=root --protocol=tcp --skip-triggers "fairdb" > DBFair.sql
 
 Controllare che nel file siano presenti all'inizio:
 
