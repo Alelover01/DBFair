@@ -1,0 +1,3 @@
+SELECT specializzazioneRichiesta
+FROM padiglioni
+WHERE codicePadiglione=?
