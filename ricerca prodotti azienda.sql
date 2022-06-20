@@ -1,5 +1,5 @@
 SELECT *
-FROM prodotto
+FROM prodotti
 WHERE idProdotto = ANY 
 				(SELECT p.codProdotto 
 				FROM prodottiazienda AS p 
