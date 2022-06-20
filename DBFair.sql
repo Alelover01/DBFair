@@ -18,7 +18,6 @@
 --
 -- Table structure for table `aziende`
 --
-
 CREATE DATABASE fairdb;
 USE fairdb;
 DROP TABLE IF EXISTS `aziende`;
@@ -43,6 +42,34 @@ LOCK TABLES `aziende` WRITE;
 /*!40000 ALTER TABLE `aziende` DISABLE KEYS */;
 INSERT INTO `aziende` VALUES (1,'ABREX','Modellismo',10),(2,'CD STAR','CD-DVD',7),(3,'2 Emme Foto','Audio e Video',5),(4,'Milk Audio Store','Audio e Video',5),(5,'HP','Stampanti',1),(6,'3DiTALY','Stampanti',1),(7,'Arduino','Arduino',9),(8,'Candy','Elettromestici',4),(9,'Ignis','Elettromestici',4),(10,'OCEAN','Elettromestici',4),(11,'Smeg','Elettromestici',4),(12,'Samsung','Telefonia',6),(13,'Apple','Telefonia',6),(14,'Oppo','Telefonia',6),(15,'Philips','Computer',2),(16,'SiComputer','Computer',2),(17,'Asus','Computer',2),(18,'Acer','Computer',2),(19,'Lenovo','Computer',2),(20,'DSE','Videosorveglianza',8),(21,'AMELI SRL','Videosorveglianza',8),(22,'NSC ITALIA','Videosorveglianza',8),(23,'Robotecnica Srl.','Robot',3),(24,'Tekna Automazioni Srl.','Robot',3),(25,'ABL Automazione S.p.A.','Robot',3);
 /*!40000 ALTER TABLE `aziende` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `aziende-spazi_esposizione`
+--
+
+DROP TABLE IF EXISTS `aziende-spazi_esposizione`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aziende-spazi_esposizione` (
+  `letteraOccupata` varchar(2) NOT NULL,
+  `numeroOccupato` int(12) NOT NULL,
+  `aziendaOccupante` int(11) NOT NULL,
+  PRIMARY KEY (`aziendaOccupante`,`numeroOccupato`,`letteraOccupata`),
+  KEY `SpazioOccupato` (`letteraOccupata`,`numeroOccupato`),
+  CONSTRAINT `AziendaOccupante` FOREIGN KEY (`aziendaOccupante`) REFERENCES `aziende` (`codiceAzienda`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `SpazioOccupato` FOREIGN KEY (`letteraOccupata`, `numeroOccupato`) REFERENCES `spazi_esposizione` (`lettera`, `numero`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aziende-spazi_esposizione`
+--
+
+LOCK TABLES `aziende-spazi_esposizione` WRITE;
+/*!40000 ALTER TABLE `aziende-spazi_esposizione` DISABLE KEYS */;
+INSERT INTO `aziende-spazi_esposizione` VALUES ('A',1,1),('A',2,2),('A',3,3),('A',4,4),('B',1,5),('B',2,6),('B',3,7),('B',4,8),('C',1,9),('C',2,10),('C',3,11),('C',4,12),('D',1,13),('D',2,14),('D',3,15),('D',4,16),('E',1,17),('E',2,18),('E',3,19),('E',4,20),('F',1,21),('A',1,22),('A',2,23),('A',3,24),('A',4,25);
+/*!40000 ALTER TABLE `aziende-spazi_esposizione` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -161,7 +188,7 @@ CREATE TABLE `padiglioni` (
   `specializzazioneRichiesta` varchar(45) NOT NULL,
   `orarioApertura` time NOT NULL,
   `orarioChiusura` time NOT NULL,
-  `giornoAperturaAreaBambini` date NOT NULL,
+  `giornoAperturaAreaBambini` date DEFAULT NULL,
   `numSpaziEsposizioneTot` int(11) NOT NULL,
   `numSpaziEsposizioneOccupati` int(11) NOT NULL,
   PRIMARY KEY (`codicePadiglione`)
@@ -174,7 +201,7 @@ CREATE TABLE `padiglioni` (
 
 LOCK TABLES `padiglioni` WRITE;
 /*!40000 ALTER TABLE `padiglioni` DISABLE KEYS */;
-INSERT INTO `padiglioni` VALUES (1,'Stampanti','15:00:00','19:00:00','0000-00-00',60,0),(2,'Computer','12:00:00','19:00:00','2022-05-06',100,0),(3,'Robot','17:00:00','20:00:00','0000-00-00',50,0),(4,'Elettromestici','09:00:00','20:00:00','2022-05-09',200,0),(5,'Audio e Video','16:00:00','17:00:00','0000-00-00',100,0),(6,'Telefonia','09:00:00','20:00:00','2022-05-07',500,0),(7,'CD-DVD','14:00:00','16:00:00','0000-00-00',250,0),(8,'Videosorveglianza','09:00:00','13:00:00','2022-05-08',300,0),(9,'Arduino','12:00:00','19:00:00','0000-00-00',50,0),(10,'Modellismo','10:00:00','16:00:00','2022-05-10',80,0);
+INSERT INTO `padiglioni` VALUES (1,'Stampanti','15:00:00','19:00:00',NULL,60,2),(2,'Computer','12:00:00','19:00:00','2022-05-06',100,5),(3,'Robot','17:00:00','20:00:00',NULL,50,3),(4,'Elettromestici','09:00:00','20:00:00','2022-05-09',200,4),(5,'Audio e Video','16:00:00','17:00:00',NULL,100,2),(6,'Telefonia','09:00:00','20:00:00','2022-05-07',500,3),(7,'CD-DVD','14:00:00','16:00:00',NULL,250,1),(8,'Videosorveglianza','09:00:00','13:00:00','2022-05-08',300,3),(9,'Arduino','12:00:00','19:00:00',NULL,50,1),(10,'Modellismo','10:00:00','16:00:00','2022-05-10',80,1);
 /*!40000 ALTER TABLE `padiglioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -413,4 +440,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-20 16:56:22
+-- Dump completed on 2022-06-20 17:35:55
